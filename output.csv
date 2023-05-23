@@ -1,0 +1,538 @@
+Text
+"CALCULATED FIELDS WITH DAX
+*Copyright 2018, Excel Maven & Maven Analytics, LLCData Analysis Expressions , commonly known as DAX , is the formula language that drives 
+Power BI. With DAX, you can:
+• Add calculated columns and measures to your model, using intuitive syntax
+• Go beyond the capabilities of traditional “grid -style” formulas, with powerful and flexible functions 
+built specifically to work with relational data models
+1) Calculated ColumnsTwo ways to use DAXMEET DAX
+2) Measures
+*Copyright 2018, Excel Maven & Maven Analytics, LLCCalculated columns allow you to add new, formula -based columns to tables
+PRO TIP:
+Calculated columns are typically used for filtering data, rather than creating numerical valuesHEY THIS IS IMPORTANT!
+As a rule of thumb, use calculated 
+columns when you want to “stamp” 
+static, fixed values to each row in a 
+table ( or use the Query Editor! )
+DO NOT use calculated columns for 
+aggregation formulas, or to calculate 
+fields for the “Values” area of a 
+visualization (use measures instead)
+• No “A1 -style” references; calculated columns refer to 
+entire tables orcolumns 
+• Calculated columns generate values for each row, which
+are visible within tables in the Data view
+• Calculated columns understand row context ; they’re great 
+for defining properties based on information in each row, 
+but generally useless for aggregation ( SUM, COUNT, etc)CALCULATED COLUMNS
+*Copyright 2018, Excel Maven & Maven Analytics, LLCIn this case we’ve added a calculated column named 
+“Parent” , which equals “ Yes” if the [ TotalChildren ] field 
+is greater than 0, and “ No” otherwise ( just like Excel! )
+•Since calculated columns understand row context , a 
+new value is calculated in each row based on the 
+value in the [ TotalChildren ] column
+•This is a valid use of calculated columns; it creates a 
+new row “property” that we can now use to filter or 
+segment any related data within the model
+Here we’re using an aggregation function (SUM) to 
+calculate a new column named TotalQuantity
+•Since calculated columns do not understand filter 
+context , the same grand total is returned in every 
+single row of the table
+•This is not a valid use of calculated columns; 
+these values are statically “stamped” onto the 
+table and can’t be filtered, sliced, subdivided, etc.CALCULATED COLUMNS (EXAMPLES)
+*Copyright 2018, Excel Maven & Maven Analytics, LLC• Like calculated columns, measures reference entire tables or
+columns (no A1 -style or “grid” references )
+• Unlike calculated columns, measure values aren’t visible within 
+tables; they can only be “ seen ” within a visualization like a 
+chart or matrix ( similar to a calculated field in an Excel pivot )
+• Measures are evaluated based on filter context , which means 
+they recalculate when the fields or filters around them change 
+(like when new row or column labels are pulled into a matrix or 
+when new filters are applied to a report )
+PRO TIP:
+Use measures to create numerical, calculated values that can be analyzed in the “ values ” field of a report visualMeasures are DAX formulas used to generate new calculated values
+HEY THIS IS IMPORTANT!
+As a rule of thumb, use measures 
+(vs. calculated columns ) when a
+single row can’t give you the 
+answer ( in other words, when you 
+need to aggregate )
+MEASURES
+*Copyright 2018, Excel Maven & Maven Analytics, LLC•Values are calculated based on information from each 
+row of a table (has row context )
+•Appends static values to each row in a table and 
+stores them in the model ( which increases file size )
+•Recalculate on data source refresh or when changes 
+are made to component columns
+•Primarily used as rows , columns , slicers or filters
+CALCULATED COLUMNS
+ MEASURES
+•Values are calculated based on information from any 
+filters in the report (has filter context )
+•Does not create new data in the tables themselves 
+(doesn’t increase file size )
+•Recalculate in response to any change to filters within 
+the report
+•Almost always used within the values field of a visual
+Calculated columns “live” in tables Measures “live” in visualsRECAP: CALCULATED COLUMNS VS.MEASURES
+*Copyright 2018, Excel Maven & Maven Analytics, LLCADDING COLUMNS &MEASURES
+Option 1: Select “New Measure ” or 
+“New Column ” from the Home tab*Option 2: Right -click within the table (in the Data view) 
+or the Field List (in either the Data or Report view)
+When you insert Columns or Measures using the Home tab 
+(Option 1), they are assigned to whichever table is currently 
+selected , or the first table in the field list by default
+•Measures can be reassigned to new “Home” tables (under the 
+“Structure ” options in the contextual Measure Tools tab), but 
+Option 2 allows you to be more deliberate about placing them
+•NOTE: Assigning measures to specific tables doesn’t have ANY 
+impact on functionality –it’s just a way to keep them organized
+*Copyright 2018, Excel Maven & Maven Analytics, LLC *In older versions of Power BI, the “New Measure” and “New Column” options were found in the Modeling tab of the Data viewQUICK MEASURES
+Quick Measures are pre -built formula 
+templates that allow you to drag and drop 
+fields, rather than write DAX from scratch
+While these tools can be helpful for defining 
+more complex measures ( like weighted 
+averages or time intelligence formulas ), 
+they encourage laziness and don’t help you 
+understand the fundamentals of DAX 
+PRO TIP:
+Just say “ NO” to quick measures 
+(you’re better than that)
+*Copyright 2018, Excel Maven & Maven Analytics, LLCImplicit measures are created when you drag raw numerical fields 
+(like “ OrderQuantity ”) into the values pane of a visual and manually 
+select the aggregation mode ( Sum, Average, Min/Max, etc)
+HEY THIS IS IMPORTANT!
+Implicit measures are only accessible within the specific visualization 
+in which it was created, and cannot be referenced elsewhere
+Explicit measures can be used anywhere in the report, and referenced 
+within other DAX calculations to create “measure trees”IMPLICIT VS. EXPLICIT MEASURES
+Example of an implicit measure
+*Copyright 2018, Excel Maven & Maven Analytics, LLCExplicit measures are created by actually entering DAX functions (or 
+adding “ quick measures ”) to define calculated columns or measuresRemember that measures are evaluated based on filter context , which means that they 
+recalculate whenever the fields or filters around them change
+For this particular value in the matrix, the Total Orders measure is calculated based 
+on the following filter context: Products[ ProductName ] = “Touring Tire Tube ”
+•This allows the measure to return the total order quantity for each product specifically (or whatever 
+the row and column labels dictate –years, countries, product categories, customer names, etc)UNDERSTANDING FILTER CONTEXT
+This Total is notcalculated by summing the values above; it evaluates as its own 
+measure, with no filter context (since we aren’t calculating orders for a specific product )
+HEY THIS IS IMPORTANT!
+Each measure value in a report is like an island , and calculates 
+according to it’s own filter context ( even Totals and Grand Totals )
+*Copyright 2018, Excel Maven & Maven Analytics, LLCMEASURE : Total Revenue
+FILTER CONTEXT :
+• Calendar[ Year ]=2016 or2017
+• Customers[ Full Name ]= Mr. Larry MunozFILTER CONTEXT (EXAMPLES)
+MEASURE : Total Orders
+FILTER CONTEXT :
+• Calendar[ Year ]=2016 or2017
+• Customers[ Occupation ]= Clerical
+MEASURE : Total Orders
+FILTER CONTEXT :
+• Calendar[ Year ]=2016 or2017MEASURE : Total Revenue
+FILTER CONTEXT :
+• Calendar[ Year ]=2016 or2017MEASURE : Total Orders
+FILTER CONTEXT :
+• Calendar[ Year ]=2016 or2017
+• Calendar[ Month ]= August 2016
+MEASURE : Total Orders
+FILTER CONTEXT :
+• Calendar[ Year ]=2016 or2017
+• Customers[ Gender ]= F (Female)
+This is a page -level 
+filter , which impact 
+ALLvisuals on the 
+report page
+*Copyright 2018, Excel Maven & Maven Analytics, LLCProduct Table
+Filter context is detected & applied Filters flow “downstream” to 
+all related tablesMeasure formula evaluates 
+against the filtered table
+Product[ CategoryName ] =“Accessories”
+Product Table11
+**
+AW_Sales_DataAW_Returns_DataCount of rows in the AW_Returns_Data
+table, filtered down to only rows where 
+the product category is “ Accessories ”=1,115How exactly is this measure calculated?
+•REMEMBER: This all happens instantly behind the scenes, every time the filter context changes
+STEP 1
+ STEP 2
+ STEP 3
+Accessories
+STEP -BY-STEP MEASURE CALCULATION
+Accessories
+AccessoriesAccessories
+*Copyright 2018, Excel Maven & Maven Analytics, LLCCOMMON DAX FUNCTIONS
+*Copyright 2018, Excel Maven & Maven Analytics, LLCTotal Quantity: =SUM (Transactions [quantity] )MEASURE NAME
+•Note: Measures are always surrounded 
+in brackets (i.e. [Total Quantity] ) when 
+referenced in formulas, so spaces are OK
+FUNCTION NAME
+•Calculated columns don’t always use functions, but 
+measures do:
+•In a Calculated Column , =Transactions[quantity]
+returns the value from the quantity column in 
+each row ( since it evaluates one row at a time )
+•In a Measure ,=Transactions[quantity] will 
+return an error since Power BI doesn’t know how 
+to translate that as a single value ( you need 
+some sort of aggregation )Referenced 
+TABLE NAMEReferenced 
+COLUMN NAME
+Note: This is a “fully qualified” column, since it’s preceeded by the table 
+name --table names with spaces must be surrounded by single quotes :
+•Without a space: Transactions [quantity]
+•With a space: ‘Transactions Table’ [quantity]
+PRO TIP:
+For column references, use the fully qualified name (i.e. Table[Column] ) 
+For measure references, just use the measure name (i.e. [Measure] ) DAX SYNTAX
+*Copyright 2018, Excel Maven & Maven Analytics, LLCArithmetic
+OperatorMeaning Example
++ Addition 2 + 7
+- Subtraction 5 –3
+* Multiplication 2 * 6
+/ Division 4 / 2
+^ Exponent 2 ^ 5Comparison
+OperatorMeaning Example
+= Equal to [City]=“Boston”
+> Greater than [Quantity]>10
+< Less than [Quantity]<10
+>= Greater than or equal to [Unit_Price ]>=2.5
+<= Less than or equal to [Unit_Price ]<=2.5
+<> Not equal to [Country]<>”Mexico”
+Text/Logical Operator Meaning Example
+& Concatenates two values to produce one text string [City] & “ “ & [State]
+&& Create an AND condition between two logical expressions ([State]=“MA”) && ([Quantity]>10)
+|| (double pipe) Create an OR condition between two logical expressions ([State]=“MA”) || ([State]=“CT”)
+IN Creates a logical OR condition based on a given list (using curly brackets) ‘Store Lookup’[State] IN { “MA”, “CT”, “NY” }
+*Head to www.msdn.microsoft.com for more information about DAX syntax, operators, troubleshooting, etc
+Pay attention to these!DAX OPERATORS
+*Copyright 2018, Excel Maven & Maven Analytics, LLCDATE & TIME
+Functions
+FILTER
+Functions
+LOGICAL
+Functions
+MATH & STATS
+Functions
+TEXT
+Functions
+*Note: This is NOT a comprehensive list (does not include trigonometry functions, parent/child functions, information functions, or other less common functions) Basic aggregation
+functions as well as 
+“iterators ” evaluated at 
+the row -levelLookup functions based 
+on related tables and 
+filtering functions for 
+dynamic calculationsFunctions for returning 
+information about values 
+in a given conditional 
+expressionFunctions to manipulate 
+text strings or control 
+formats for dates, times 
+or numbers Basic date and time 
+functions as well as 
+advanced time 
+intelligence operations
+Common Examples:
+• SUM
+• AVERAGE
+• MAX/MIN
+• DIVIDE
+• COUNT/COUNTA
+• COUNTROWS
+• DISTINCTCOUNT
+Iterator Functions:
+• SUMX
+• AVERAGEX
+• MAXX/MINX
+• RANKX
+• COUNTXCommon Examples:
+• CALCULATE
+• FILTER
+• ALL
+• ALLEXCEPT
+• RELATED
+• RELATEDTABLE
+• DISTINCT
+• VALUES
+• EARLIER/EARLIEST
+• HASONEVALUE
+• HASONEFILTER
+• ISFILTERED
+• USERELATIONSHIPCommon Examples:
+• IF
+• IFERROR
+• AND
+• OR
+• NOT
+• SWITCH
+• TRUE
+• FALSECommon Examples:
+• CONCATENATE
+• FORMAT
+• LEFT/MID/RIGHT
+• UPPER/LOWER
+• PROPER
+• LEN
+• SEARCH/FIND
+• REPLACE
+• REPT
+• SUBSTITUTE
+• TRIM
+• UNICHARCommon Examples:
+• DATEDIFF
+• YEARFRAC
+• YEAR/MONTH/DAY
+• HOUR/MINUTE/SECOND
+• TODAY/NOW
+• WEEKDAY/WEEKNUM
+Time Intelligence Functions:
+• DATESYTD
+• DATESQTD
+• DATESMTD
+• DATEADD
+• DATESINPERIODCOMMON FUNCTION CATEGORIES
+*Copyright 2018, Excel Maven & Maven Analytics, LLC=HOUR/MINUTE/SECOND (Datetime)
+HOUR/MINUTE/
+SECOND ()
+Returns the hour (0 -23), minute (0 -59), or 
+second (0 -59) of a given datetime value
+WEEKDAY/
+WEEKNUM ()
+DAY/MONTH/
+YEAR ()
+TODAY/NOW ()
+Returns a weekday number from 1 (Sunday) 
+to 7 (Saturday), or the week # of the year =WEEKDAY/WEEKNUM (Date, [ReturnType ])
+Returns the day of the month (1 -31), month 
+of the year (1 -12), or year of a given date
+Returns the current date or exact time =TODAY/NOW ()=DAY/MONTH/YEAR (Date)
+EOMONTH ()
+Returns the date of the last day of the 
+month, +/ -a specified number of months =EOMONTH (StartDate , Months)
+DATEDIFF ()
+Returns the difference between two dates, 
+based on a selected interval =DATEDIFF (Date1, Date2, Interval)BASIC DATE &TIME FUNCTIONS
+*Copyright 2018, Excel Maven & Maven Analytics, LLC=IF(LogicalTest , ResultIfTrue , [ResultIfFalse ])
+ IF()
+Checks if a given condition is met, and 
+returns one value if the condition is TRUE, 
+and another if the condition is FALSE
+AND ()
+OR()
+IFERROR ()
+Checks whether both arguments are TRUE, 
+and returns TRUE if both arguments are 
+TRUE, otherwise returns FALSE=AND (Logical1, Logical2)
+Checks whether one of the arguments is 
+TRUE to return TRUE, and returns FALSE if 
+both arguments are FALSE
+Evaluates an expression and returns a 
+specified value if the expression returns an 
+error, otherwise returns the expression itself=IFERROR (Value, ValueIfError )
+=OR(Logical1, Logical2)Note: Use the &&and 
+|| operators if you 
+want to include more 
+than two conditions!BASIC LOGICAL FUNCTIONS (IF/AND/OR)
+*Copyright 2018, Excel Maven & Maven Analytics, LLC=CONCATENATE (Text1, Text2)
+ CONCATENATE ()
+ Joins two text strings into one
+UPPER/LOWER/
+PROPER ()
+LEN()
+LEFT/MID/
+RIGHT ()
+Converts letters in a string to 
+upper/lower/proper case =UPPER/LOWER/PROPER (Text)
+Returns the number of characters in a string
+Returns a number of characters from the 
+start/middle/end of a text string=LEFT/RIGHT (Text, [NumChars ])
+=MID (Text, StartPosition , NumChars )=LEN(Text)
+SUBSTITUTE ()
+Replaces an instance of existing text with 
+new text in a string=SUBSTITUTE (Text, OldText , NewText , 
+[InstanceNumber ])
+SEARCH ()
+Returns the position where a specified string 
+or character is found, reading left to right=SEARCH (FindText , WithinText , 
+[StartPosition ], [NotFoundValue ])Note: Use the & operator as a shortcut, 
+or to combine more than two strings!TEXT FUNCTIONS
+*Copyright 2018, Excel Maven & Maven Analytics, LLC=RELATED (ColumnName )
+RELATED ()
+The column that contains the 
+values you want to retrieve
+Examples:
+•Product_Lookup [ProductName ]
+•Territory_Lookup [Country]
+Returns related values in each row of a table based on relationships with other tables
+HEY THIS IS IMPORTANT!
+RELATED works almost exactly like a VLOOKUP function –it uses 
+the relationship between tables ( defined by primary and foreign 
+keys ) to pull values from one table into a new column of another
+Since this function requires row context, it can only be used as a 
+calculated column or as part of an iterator function that cycles 
+through all rows in a table ( FILTER, SUMX, MAXX, etc) 
+PRO TIP:
+Avoid using RELATED to create redundant calculated columns unless you absolutely need them, since those 
+extra columns increase file size; instead, use RELATED within a measure like FILTER or SUMX  RELATED
+*Copyright 2018, Excel Maven & Maven Analytics, LLC=SUM (ColumnName )
+ SUM ()
+ Evaluates the sum of a column
+DIVIDE ()
+MAX ()
+MIN ()
+AVERAGE ()
+Performs division and returns the 
+alternate result (or blank) if div/0 =DIVIDE (Numerator, Denominator, [AlternateResult ])
+Returns the largest value in a column 
+or between two scalar expressions=MAX (ColumnName ) or=MAX (Scalar1, [Scalar2] )
+Returns the smallest value in a column 
+or between two scalar expressions
+Returns the average (arithmetic 
+mean) of all the numbers in a column=AVERAGE (ColumnName )BASIC MATH &STATS FUNCTIONS
+*Copyright 2018, Excel Maven & Maven Analytics, LLC=MIN (ColumnName ) or=MIN (Scalar1, [Scalar2] )=COUNT (ColumnName )
+ COUNT ()
+Counts the number of cells in a column that 
+contain numbers
+COUNTROWS ()
+DISTINCTCOUNT ()
+COUNTA ()
+Counts the number of rows in the specified 
+table, or a table defined by an expression
+Counts the number of distinct or unique 
+values in a column
+Counts the number of non -empty cells in a 
+column (numerical and non -numerical)=COUNTA (ColumnName )
+=COUNTROWS (Table )=DISTINCTCOUNT (ColumnName )COUNT, COUNTA, DISTINCTCOUNT &COUNTROWS
+*Copyright 2018, Excel Maven & Maven Analytics, LLC=CALCULATE (Expression, [Filter1], [Filter2],… )
+CALCULATE ()
+Name of an existing measure, or a DAX 
+formula for a valid measure
+Examples:
+•[Total Orders]
+•SUM( Returns_Data [ReturnQuantity ])List of simple Boolean (True/False) filter expressions 
+(note: these require simple, fixed values; you cannot 
+create filters based on measures)
+Examples:
+•Territory_Lookup [Country] = “USA”
+•Calendar[Year] > 1998
+PRO TIP:
+CALCULATE works just like SUMIF or COUNTIF in Excel, except it can evaluate measures based on ANY 
+sort of calculation (not just a sum, count, etc); it may help to think of it like “CALCULATEIF”
+Evaluates a given expression or formula under a set of defined filters CALCULATE
+*Copyright 2018, Excel Maven & Maven Analytics, LLCWait, why do we see the same repeating values when 
+we view a matrix with different categories on rows? 
+Shouldn’t these cells have different filter contexts for 
+Accessories , Clothing , Components , etc?Here we’ve defined a new measure named “ Bike Returns ”, which 
+evaluates the “ Total Returns ” measure when the CategoryName
+in the Products table equals  “ Bikes ” 
+HEY THIS IS IMPORTANT!
+CALCULATE modifies and overrules any competing filter context!
+In this example, the “Clothing” row has filter context of 
+CategoryName = “Clothing ” (defined by the row label ) and
+CategoryName = “Bikes ” (defined by the CALCULATE function )
+Both cannot be true at the same time, so the “ Clothing ” filter is 
+overwritten and the “ Bikes ” filter (from CALCULATE) takes priority
+CALCULATE (EXAMPLE)
+*Copyright 2018, Excel Maven & Maven Analytics, LLCProduct Table
+Filter context is 
+detected & appliedFilters flow “downstream” to 
+all related tablesMeasure formula evaluates 
+against the filtered table
+Products[ CategoryName ] =“Accessories”
+Product Table11
+**
+AW_Sales_DataAW_Returns_DataCount of rows in the AW_Returns_Data
+table, filtered down to only rows where 
+the product category is “ Bikes ”=342
+STEP 1
+ STEP 2
+ STEP 3
+Accessories
+Bikes
+BikesBikes
+CALCULATE CHANGES THE FILTER CONTEXT
+CALCULATE
+[CategoryName ] =“Bikes”Filters modified by CALCULATEIf the measure being evaluated contains a CALCULATE 
+function, filter context is overwritten between Step 1 & Step 2
+Product Table
+Bikes
+*Copyright 2018, Excel Maven & Maven Analytics, LLC=ALL(Table orColumnName , [ColumnName1], [ColumnName2],… )
+ALL()
+The table or column that you 
+want to clear filters on
+Examples:
+•Transactions
+•Products[ ProductCategory ]List of columns that you want to clear filters on (optional)
+Notes:
+•If your first parameter is a table, you can’t specify additional columns
+•All columns must include the table name, and come from the same table
+Examples:
+•Customer_Lookup [CustomerCity ], Customer_Lookup [CustomerCountry ]
+•Products[ ProductName ]
+Returns all rows in a table, or all values in a column, ignoring any filters that have been applied
+PRO TIP:
+Instead of adding filter context, ALL removes it. This is often used when you need unfiltered values that 
+won’t react to changes in filter context (i.e. % of Total , where the denominator needs to remain fixed) ALL
+*Copyright 2018, Excel Maven & Maven Analytics, LLCTable to be filtered
+Examples:
+•Territory_Lookup
+•Customer_LookupA Boolean (True/False) filter expression 
+to be evaluated for each row of the table 
+Examples:
+•Territory_Lookup [Country] = “USA”
+•Calendar[Year] = 1998
+•Products[Price] > [Overall Avg Price]=FILTER (Table , FilterExpression )
+FILTER ()
+ Returns a table that represents a subset of another table or expression
+PRO TIP:
+Since FILTER iterates through each row in a table, it can be slow and processor -intensive; don’t use FILTER 
+if a CALCULATE function will accomplish the same thingHEY THIS IS IMPORTANT!
+FILTER is used to add new filter context, 
+and can handle more complex filter 
+expressions than CALCULATE ( by 
+referencing measures, for example )
+Since FILTER returns an entire table, it’s 
+almost always used as an input to other 
+functions, like CALCULATE or SUMX
+FILTER
+*Copyright 2018, Excel Maven & Maven Analytics, LLCIterator (or “ X”) functions allow you to loop through the same calculation or expression on 
+each row of a table , and then apply some sort of aggregation to the results ( SUM , MAX , etc) 
+Table in which the
+expression will be evaluated
+Examples:
+•Sales
+•FILTER(Sales, 
+RELATED(Products[Category])=“Clothing”)Expression to be evaluated for
+each row of the given table
+Examples:
+•[Total Orders]
+•Sales[ RetailPrice ] * Sales[Quantity]Aggregation to apply 
+to calculated rows*
+Examples:
+•SUMX
+•COUNTX
+•AVERAGEX
+•RANKX
+•MAXX/MINX
+PRO TIP:
+Imagine the function adding a temporary new column to the table, calculating the value in each row 
+(based on the expression) and then applying the aggregation to that new column (like SUMPRODUCT) 
+*In this example we’re looking at SUMX , but other “X” functions follow a similar syntaxITERATOR (“ X”) FUNCTIONS
+*Copyright 2018, Excel Maven & Maven Analytics, LLC=SUMX (Table , Expression )=CALCULATE (Measure,
+DATESINPERIOD (Calendar[Date], MAX (Calendar[Date]), -10, DAY))Time Intelligence functions allow you to easily calculate common time comparisons:
+=CALCULATE (Measure, DATESYTD (Calendar[Date]))
+=CALCULATE (Measure, DATEADD (Calendar[Date], -1, MONTH ))
+Performance
+To-Date Use DATESQTD for Quarters or DATESMTD for Months 
+Previous
+Period
+Select an interval ( DAY, MONTH ,QUARTER ,orYEAR ) and the 
+# of intervals to compare (i.e. previous month, rolling 10 -day)
+Running
+Total
+PRO TIP:
+To calculate a moving average , use the running total calculation above and divide by the number of intervalsTIME INTELLIGENCE FORMULAS
+*Copyright 2018, Excel Maven & Maven Analytics, LLC"
